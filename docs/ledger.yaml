@@ -1,0 +1,765 @@
+openapi: 3.1.0
+info:
+  title: Ledger
+  description: |+
+    <p>API service for managing user balance</p>
+
+    ### Web Sockets
+    User balances are propagated via websockets (Live-Data service)
+    event-key: **user_balance**
+
+
+  version: 1.121.0
+servers:
+- url: https://api.develop.qa.verekuu.com
+  description: Generated server url
+security:
+- Token: []
+  Brand: []
+tags:
+- name: User Transactions
+  description: Access to user transactions
+- name: User Transactions
+  description: Access to actual user transactions
+- name: User Balance
+  description: Access to actual user balance
+paths:
+  /api/ledger/v1/funds/transfer:
+    post:
+      tags:
+      - User Transactions
+      summary: Transfer funds between accounts that belong to the same user
+      operationId: transfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FundsTransferRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/v1/funds/transactions/statement:
+    post:
+      tags:
+      - User Transactions
+      summary: Get transactions of logged in user with running balance
+      operationId: getTransactionStatement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserStatementRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTransactionsResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/v1/funds/balance:
+    get:
+      tags:
+      - User Balance
+      summary: Get balance of default currency. If balance is negative zero amount
+        will be returned
+      operationId: getBalance
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalanceResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+    post:
+      tags:
+      - User Balance
+      summary: "Get balance for requested currency, always returns true balance (even\
+        \ negative)"
+      operationId: getBalance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BalanceRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BalanceResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/admin/v1/transactions/search:
+    post:
+      tags:
+      - User Transactions
+      summary: Finds transactions by related id and type
+      operationId: findTransactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionSearchRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListResponseTransactionResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/admin/v1/transactions/list:
+    post:
+      tags:
+      - User Transactions
+      summary: Get transactions of user with running balance
+      operationId: getUserTransaction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserTransactionsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserTransactionsResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/admin/v1/funds/transfer:
+    post:
+      tags:
+      - funds-management-admin-controller
+      summary: Transfer funds between two accounts in the same jurisdiction
+      operationId: transferFundsBetweenAccounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FundsTransferAdminRequest"
+        required: true
+      responses:
+        "200":
+          description: Transfer completed successfully
+        "400":
+          description: Validation for transfer failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/admin/v1/funds/balance:
+    post:
+      tags:
+      - User Balance
+      summary: If currency is not provided then returns all available user balances
+      operationId: getBalances
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BalanceAdminRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListResponseBalanceAdminResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+  /api/ledger/admin/v1/transactions/export:
+    get:
+      tags:
+      - User Transactions
+      summary: Exports transactions of user with running balance
+      operationId: exportUserTransaction
+      parameters:
+      - name: arg0
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserTransactionsExportRequest"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                properties:
+                  error:
+                    type: string
+                  uuid:
+                    type: string
+                  params:
+                    type: array
+                    items:
+                      type: string
+                  payload:
+                    type: object
+                    additionalProperties:
+                      type: object
+components:
+  schemas:
+    FundsTransferRequest:
+      type: object
+      properties:
+        creditor:
+          type: string
+          format: uuid
+          description: UUID of a user who gives funds.
+        debtor:
+          type: string
+          format: uuid
+          description: UUID of a user who receives funds.
+        amount:
+          type: number
+          description: The amount of funds being transferred.
+        currency:
+          type: string
+          description: The currency in which the transfer amount is denominated. Must
+            follow ISO 4217 (3 characters) standard
+      required:
+      - amount
+      - creditor
+      - currency
+      - debtor
+    UserStatementRequest:
+      type: object
+      properties:
+        nextPageId:
+          type: string
+          description: Id for next page that is taken from previous search response.
+            Should be null on first request
+        pageSize:
+          type: integer
+          format: int32
+          description: "How many transactions to load. Default value is 50, max is\
+            \ 1000"
+          maximum: 1000
+          minimum: 1
+        currency:
+          type: string
+          description: "If not provided default currency will be used. Format: ISO\
+            \ 4217 (3 characters) and upper case"
+    TransactionResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        userUuid:
+          type: string
+          format: uuid
+        balance:
+          type: number
+          description: Used to show running balance when possible
+        currency:
+          type: string
+        change:
+          type: number
+        created:
+          type: string
+          format: date-time
+        relatedId:
+          type: string
+        relatedType:
+          type: string
+        metadata:
+          type: string
+    UserTransactionsResponse:
+      type: object
+      properties:
+        nextPageId:
+          type: string
+          description: Id for next page if there are more transactions to load.
+        transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionResponse"
+    BalanceRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency should be in ISO 4217 (3 characters) and upper case
+      required:
+      - currency
+    BalanceResponse:
+      type: object
+      properties:
+        balance:
+          type: number
+        currency:
+          type: string
+    TransactionSearchRequest:
+      type: object
+      properties:
+        brandIdentifier:
+          type: string
+        relatedId:
+          type: string
+        relatedType:
+          type: string
+      required:
+      - brandIdentifier
+      - relatedId
+    ListResponseTransactionResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionResponse"
+    Query:
+      type: object
+      properties:
+        userUuid:
+          type: string
+          format: uuid
+        brandIdentifier:
+          type: string
+        currency:
+          type: string
+          description: "If not provided default currency will be used. Format: ISO\
+            \ 4217 (3 characters) and upper case"
+        relatedId:
+          type: string
+      required:
+      - brandIdentifier
+      - userUuid
+    UserTransactionsRequest:
+      type: object
+      properties:
+        query:
+          $ref: "#/components/schemas/Query"
+        nextPageId:
+          type: string
+          description: Id for next page that is taken from previous search response.
+            Should be null on first request
+        pageSize:
+          type: integer
+          format: int32
+          description: How many transactions to load. Default 100
+          minimum: 1
+      required:
+      - query
+    FundsTransferAdminRequest:
+      type: object
+      properties:
+        creditor:
+          type: string
+          format: uuid
+          description: UUID of a user who gives funds.
+        debtor:
+          type: string
+          format: uuid
+          description: UUID of a user who receives funds.
+        amount:
+          type: number
+          description: The amount of funds being transferred.
+        currency:
+          type: string
+          description: The currency in which the transfer amount is denominated. Must
+            follow ISO 4217 (3 characters) standard
+        brandIdentifier:
+          type: string
+          description: The brand associated with both the creditor and the debtor.
+        reason:
+          type: string
+          enum:
+          - NO_ACCESS_TO_OLD_ACCOUNT
+          - LEGAL_REQUIREMENT
+          - OTHER
+          - WITHDRAWAL_ISSUES
+        comment:
+          type: string
+          description: Additional explanation or details regarding the reason for
+            the transfer. Required in case of reason OTHER
+      required:
+      - amount
+      - brandIdentifier
+      - creditor
+      - currency
+      - debtor
+      - reason
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        uuid:
+          type: string
+        params:
+          type: array
+          items:
+            type: string
+        payload:
+          type: object
+          additionalProperties:
+            type: object
+    BalanceAdminRequest:
+      type: object
+      properties:
+        userUuid:
+          type: string
+          format: uuid
+        brandIdentifier:
+          type: string
+        currency:
+          type: string
+          description: Currency should be in ISO 4217 (3 characters) and upper case
+      required:
+      - brandIdentifier
+      - userUuid
+    BalanceAdminResponse:
+      type: object
+      properties:
+        balance:
+          type: number
+        currency:
+          type: string
+    ListResponseBalanceAdminResponse:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/BalanceAdminResponse"
+    UserTransactionsExportRequest:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        userUuid:
+          type: string
+          format: uuid
+        brandIdentifier:
+          type: string
+        currency:
+          type: string
+        from:
+          type: string
+          format: date
+        to:
+          type: string
+          format: date
+  securitySchemes:
+    Token:
+      type: apiKey
+      name: x-pawa-token
+      in: cookie
+    Brand:
+      type: apiKey
+      name: x-pawa-brand
+      in: header
