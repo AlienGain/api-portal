@@ -51,7 +51,7 @@ info:
     )"
   version: 2.194.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://api.ingress.betpawa.com
   description: Generated server url
 security:
 - Token: []

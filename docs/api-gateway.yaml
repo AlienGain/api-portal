@@ -26,7 +26,7 @@ info:
     \ will have status code, route ID and brand identifier in tags"
   version: 0.891.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://api.ingress.betpawa.com
   description: Generated server url
 security:
 - Token: []
