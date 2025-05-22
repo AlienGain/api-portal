@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pawa API Documentation</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+</head>
+<body>
+    <div id="pawa-api-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
+    <script>
+        const ui = SwaggerUIBundle({
+            urls: [
+                { url: "docs/api-gateway.yaml", name: "API Gateway" },
+                { url: "docs/user.yaml", name: "User Service" },
+                { url: "docs/ledger.yaml", name: "Ledger Service" }
+            ],
+            dom_id: '#pawa-api-ui',
+            deepLinking: true,
+            showExplorer: false,
+            tryItOutEnabled: false,
+            supportedSubmitMethods: [],
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            layout: "StandaloneLayout"
+        });
+    </script>
+</body>
+</html>
