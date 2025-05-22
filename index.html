@@ -2,31 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>API Documentation</title>
-    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css" />
+    <title>API Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h1 { color: #333; }
+        pre { background: #f4f4f4; padding: 1em; }
+    </style>
 </head>
 <body>
-    <div id="swagger-ui"></div>
-    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
-    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
-    <script>
-        const ui = SwaggerUIBundle({
-            urls: [
-                { url: "docs/api-gateway.yaml", name: "API Gateway" },
-                { url: "docs/user.yaml", name: "User Service" },
-                { url: "docs/ledger.yaml", name: "Ledger Service" }
-            ],
-            dom_id: '#swagger-ui',
-            deepLinking: true,
-            showExplorer: false,
-            tryItOutEnabled: false,
-            supportedSubmitMethods: [],
-            presets: [
-                SwaggerUIBundle.presets.apis,
-                SwaggerUIStandalonePreset
-            ],
-            layout: "StandaloneLayout"
-        });
-    </script>
+    <h1>Welcome to the API Portal</h1>
+    <p>This site hosts the Pawa API documentation for our services.</p>
+    <p>
+        <a href="pawa-api.html">Open the Pawa API UI</a>
+    </p>
+    <h2>Prompt Examples for Replit</h2>
+    <p>Use the following prompt in <a href="https://replit.com/">Replit</a> to quickly start a mini app that interacts with the API described in the Pawa API docs.</p>
+    <pre>
+You are developing a small Python app on Replit. The app should authenticate using the "user" service and then fetch ledger entries using the "ledger" service. Refer to the API definitions available at https://&lt;your-github-pages-url&gt;/pawa-api.html. Implement the API calls with the requests library and print the results to the console.
+    </pre>
 </body>
 </html>
