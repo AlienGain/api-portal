@@ -1,14 +1,24 @@
 openapi: 3.1.0
 info:
-  title: User
-  description: "User entities represent accounts in the system.\n\nHaving a user is\
-    \ mandatory to access most of the existing endpoints. Such endpoints are marked\
-    \ as required `Token` that is provided on authentication in the system.\n\nPhone\
-    \ number is used as user identifier.\n\nGeneral portal customers users are created\
-    \ via `api/user/v1/users` endpoint and will always have a role `USER` that limits\
-    \ their access to only `/api/{service}/v1/` endpoints\n\nIt is not possible to\
-    \ remove User from the system, but user account can be closed or banned to revoke\
-    \ their access to the system.\n\n  \n**Error codes:**  \nACCOUNT_NOT_FOUND (\"\
+  title: User Service API
+  description: "# User Service API Documentation\n\n## Overview\nUser entities represent\
+    \ accounts in the system. Having a user is mandatory to access most of the existing\
+    \ endpoints. Such endpoints are marked as required `x-pawa-token` that is provided\
+    \ on authentication in the system.\n\nPhone number is used as user identifier.\n\
+    \nGeneral portal customers users are created via `api/user/v3/signup-and-authenticate`\
+    \ endpoint.\n\nIt is not possible to remove User from the system, but user account\
+    \ can be closed or banned to revoke their access to the system. Also user can\
+    \ be archived.\n\nBusiness processes are described in the [business-process-relations.md](business-process-relations.md)\
+    \ file.\n\n## Authentication\nThe API uses token-based authentication. After successful\
+    \ authentication, a token is provided in the `x-pawa-token` cookie. This token\
+    \ must be included in subsequent requests as a cookie.\n\n## Common Response Codes\n\
+    - **200 OK**: The request was successful\n- **201 Created**: The resource was\
+    \ successfully created\n- **400 Bad Request**: The request was invalid or cannot\
+    \ be served\n- **401 Unauthorized**: Authentication is required or has failed\n\
+    - **500 Internal Server Error**: An error occurred on the server\n\n## Rate Limiting\n\
+    Many endpoints implement rate limiting to prevent abuse. When rate limits are\
+    \ exceeded, the API will return appropriate error responses with information about\
+    \ when the limit will be reset.\n  \n**Error codes:**  \nACCOUNT_NOT_FOUND (\"\
     User %s not found\")  \nINVALID_PHONE_NUMBER (\"%s is not a valid phone number\"\
     )  \nPASSWORD_REQUIREMENTS_MISMATCH (\"Your password must be at least 4 characters\
     \ long\")  \nACCOUNT_EXISTS (\"Your account already exists\")  \nACCOUNT_CLOSED\
@@ -49,32 +59,20 @@ info:
     The password cannot match the OTP code\")  \nUSER_ALREADY_ARCHIVED (\"User %s\
     \ is already archived\")  \nUSER_ALREADY_ACTIVE (\"User %s is already active\"\
     )"
-  version: 2.194.0
+  version: develop
 servers:
-- url: https://api.ingress.betpawa.com
+- url: http://localhost:17640
   description: Generated server url
 security:
 - Token: []
   Brand: []
 tags:
-- name: User Access Management
-  description: API endpoints for banning and closing users
 - name: Authentication
   description: Managing user sessions
-- name: User Notes Management
-  description: API endpoints for updating user notes data
-- name: Connected Accounts Management for Admins
-  description: API endpoints for managing connected accounts
-- name: User Management
-  description: API endpoints for updating user data
 - name: Connected Accounts Management
   description: API endpoints for connecting different user accounts
 - name: User Account Management
   description: "API endpoints for password change, restore and verification management"
-- name: User Search Management
-  description: API endpoints for searching user data
-- name: OTP configuration Management
-  description: API endpoints for managing OTP configurations
 paths:
   /api/user/v1/self-exclude:
     put:
@@ -128,374 +126,14 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-  /api/user/admin/v2/users/{uuid}:
-    put:
-      tags:
-      - User Management
-      summary: Updates user details. Note of changed values will be also saved
-      operationId: updateUser
-      parameters:
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserDetailsUpdateRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation
-        "404":
-          description: User not found
-          content:
-            '*/*':
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/self-exclusion/remove:
-    put:
-      tags:
-      - User Access Management
-      summary: Remove self exclusion of the user.
-      operationId: removeSelfExclusion
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RemoveSelfExclusionRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation.
-        "404":
-          description: Resource not found
-          content:
-            '*/*':
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/close:
-    put:
-      tags:
-      - User Access Management
-      summary: Toggle account closed flag. User will be banned and all sessions will
-        be invalidated.
-      operationId: close
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CloseRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CloseResponse"
-        "404":
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/ban:
-    put:
-      tags:
-      - User Access Management
-      summary: "Toggle ban flag of the user. When banning, all user sessions will\
-        \ be invalidated."
-      operationId: ban
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/BanRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation.
-        "404":
-          description: Resource not found
-          content:
-            '*/*':
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/archive:
-    put:
-      tags:
-      - User Access Management
-      summary: Toggle archived flag of the user. During archive process all user sessions
-        will be invalidated.
-      operationId: archive
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ArchiveRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation.
-        "404":
-          description: Resource not found
-          content:
-            '*/*':
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/notes/{note-uuid}:
-    put:
-      tags:
-      - User Notes Management
-      summary: Update user note with new text
-      operationId: updateNotes
-      parameters:
-      - name: note-uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserNoteCreateRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation
-        "404":
-          description: The specified resource was not found
-          content:
-            application/json:
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
   /api/user/v3/verify-and-authenticate:
     post:
       tags:
       - User Account Management
-      summary: Completes user's phone number verification by code send in message
+      summary: Completes user's phone number verification by code sent in message
+      description: This endpoint verifies the user's phone number using the verification
+        code they received and authenticates the user in a single step. It's the final
+        step in the account verification flow.
       operationId: verifyAndAuthenticate
       requestBody:
         content:
@@ -505,7 +143,8 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful Operation.
+          description: Successful Operation. User is authenticated and x-pawa-token
+            will be set to cookie.
           content:
             application/json:
               schema:
@@ -573,7 +212,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SignUpRequestV2"
+              $ref: "#/components/schemas/SignUpRequest"
         required: true
       responses:
         "201":
@@ -629,8 +268,10 @@ paths:
     post:
       tags:
       - User Account Management
-      summary: User requests his verification code from list of available methods.
-        The message with code will be send by selected method
+      summary: User requests his verification code from list of available methods
+      description: "This endpoint allows a user to request a verification code. The\
+        \ message with the code will be sent by the selected method (SMS, email, etc.).\
+        \ This is used for account verification purposes."
       operationId: requestVerificationCode
       requestBody:
         content:
@@ -640,18 +281,14 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful Operation.
+          description: "Successful Operation. Returns information about call limits.\
+            \ If the limit is exceeded, the endpoint still returns HTTP code 200,\
+            \ but the backend logic will not be executed, and this will be indicated\
+            \ by the flag com.betpawa.user.rest.dto.LimitsCollectionResponse#isAllowed."
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/LimitsCollectionResponse"
-        "400":
-          description: Endpoint will limit requests for user for some time in case
-            of too many attempts.
-          content:
-            application/json:
-              schema:
-                type: string
         "401":
           description: Unauthorized
           content:
@@ -693,6 +330,8 @@ paths:
       tags:
       - User Account Management
       summary: Checks received OTP code for validity
+      description: This endpoint verifies if the OTP code provided by the user is
+        valid. It's used as part of the password reset flow.
       operationId: verifyOtpCode
       requestBody:
         content:
@@ -702,7 +341,8 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful Operation.
+          description: Successful Operation. Returns whether the OTP is valid and
+            information about call limits.
           content:
             application/json:
               schema:
@@ -754,8 +394,10 @@ paths:
     post:
       tags:
       - User Account Management
-      summary: Authenticates user based on provided OTP code. Endpoint will limit
-        requests for user.
+      summary: Authenticates user based on provided OTP code and updates password
+      description: "This endpoint allows a user to set a new password and authenticate\
+        \ in a single step, using the OTP code they received. It's the final step\
+        \ in the password reset flow."
       operationId: updatePasswordAndAuthenticate
       requestBody:
         content:
@@ -820,6 +462,9 @@ paths:
       - User Account Management
       summary: User requests it's password to be reset. One-time password will be
         send according to selected method
+      description: "This endpoint allows a user to request a password reset. An OTP\
+        \ (One-Time Password) will be sent to the user via the selected method (SMS,\
+        \ email, etc.)."
       operationId: requestOtpCode
       requestBody:
         content:
@@ -829,18 +474,14 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful Operation.
+          description: "Successful Operation. Returns information about call limits.\
+            \ If the limit is exceeded, the endpoint still returns HTTP code 200,\
+            \ but the backend logic will not be executed, and this will be indicated\
+            \ by the flag com.betpawa.user.rest.dto.LimitsCollectionResponse#isAllowed."
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/LimitsCollectionResponse"
-        "400":
-          description: Endpoint will limit requests for user for some time in case
-            of too many attempts.
-          content:
-            application/json:
-              schema:
-                type: string
         "401":
           description: Unauthorized
           content:
@@ -882,7 +523,7 @@ paths:
       tags:
       - Authentication
       summary: Authenticates user based on provided credentials. Endpoint will limit
-        requests for user for 60 minutes in case of 10 unsuccessful attempts.
+        requests for user for some tine in case of many unsuccessful attempts.
       operationId: authenticate
       requestBody:
         content:
@@ -899,7 +540,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AuthenticationResponseV3"
         "400":
-          description: Requests suspended for 60 minutes for the user because of 10
+          description: Requests suspended for some time for the user because of many
             unsuccessful attempts.
           content:
             application/json:
@@ -945,8 +586,13 @@ paths:
     post:
       tags:
       - Connected Accounts Management
-      summary: Authenticates connected user based on the token of existing user. Endpoint
-        will limit requests for user for 60 minutes in case of 10 unsuccessful attempts.
+      summary: Switch to a connected user account
+      description: |
+        Authenticates as a connected user based on the token of the currently logged-in user.
+        This allows users to switch between their connected accounts without re-entering credentials.
+        The current session will be terminated and a new session for the connected user will be created.
+
+        Endpoint will limit requests for user for some time in case of many unsuccessful attempts.
       operationId: authenticate_1
       requestBody:
         content:
@@ -956,15 +602,15 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful Operation. x-pawa-token will be set to cookie. This
-            token should be provided for all further requests
+          description: Successful Operation. x-pawa-token will be set to cookie for
+            the connected user. This token should be provided for all further requests
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthenticationResponse"
+                $ref: "#/components/schemas/LimitsCollectionResponse"
         "400":
-          description: Requests suspended for 60 minutes for the user because of 10
-            unsuccessful attempts.
+          description: "Invalid request, connection not found, or requests suspended\
+            \ for 60 minutes due to too many unsuccessful attempts."
           content:
             application/json:
               schema:
@@ -1061,6 +707,9 @@ paths:
       tags:
       - Connected Accounts Management
       summary: Create connection to other user
+      description: Initiates a connection between the current user and another user
+        identified by phone number. The connection starts in an unverified state and
+        requires verification to be fully established.
       operationId: createUnverifiedConnections
       requestBody:
         content:
@@ -1070,11 +719,17 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: Connection successfully initiated
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConnectedUsersResponse"
+        "400":
+          description: Invalid request or connection cannot be established
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "401":
           description: Unauthorized
           content:
@@ -1116,6 +771,9 @@ paths:
       tags:
       - Connected Accounts Management
       summary: Verify connection to other user
+      description: "Completes the connection verification process between users by\
+        \ validating the verification code. Once verified, users can switch between\
+        \ connected accounts."
       operationId: createVerifiedConnection
       requestBody:
         content:
@@ -1125,803 +783,17 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          description: Connection successfully verified
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConnectedUsersResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/v1/authenticate:
-    post:
-      tags:
-      - Authentication
-      summary: Authenticates user based on provided credentials. Endpoint will limit
-        requests for user for 60 minutes in case of 10 unsuccessful attempts.
-      operationId: authenticate_2
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/AuthenticationRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation. x-pawa-token will be set to cookie. This
-            token should be provided for all further requests
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuthenticationResponse"
         "400":
-          description: Requests suspended for 60 minutes for the user because of 10
-            unsuccessful attempts.
+          description: Invalid verification code or connection cannot be verified
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-      deprecated: true
-  /api/user/admin/v2/users:
-    post:
-      tags:
-      - User Search Management
-      summary: Get user details by uuid and brand
-      operationId: getUserDetails
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserDetailRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserDetailsResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/{brand-identifier}/{uuid}/reset-call-limits:
-    post:
-      tags:
-      - User Management
-      summary: Reset all API call limiter restrictions for user with userUuid
-      operationId: resetLimitsForUser
-      parameters:
-      - name: brand-identifier
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/list:
-    post:
-      tags:
-      - User Search Management
-      summary: Get users identifiers using set of criteria
-      operationId: searchUsers
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UsersSearchRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListResponseUserSearchResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/details:
-    post:
-      tags:
-      - User Search Management
-      summary: Resolve users details by provided list of uuids
-      operationId: resolveUserDataByUuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserDetailsRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListResponseUserSearchDetailsResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/notes:
-    post:
-      tags:
-      - User Notes Management
-      summary: "Create new note for user, can be used as reminder for changes made\
-        \ to user and visible for all admins."
-      operationId: createNotes
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserNoteCreateRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserNoteResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/notes/list:
-    post:
-      tags:
-      - User Notes Management
-      summary: Retrieve all user notes for specified user
-      operationId: getNotesList
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserNotesRequest"
-        required: true
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListResponseUserNoteResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v1/otp/configuration:
-    post:
-      tags:
-      - OTP configuration Management
-      summary: Create or update otp configuration
-      operationId: createOrUpdate
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/OtpConfigurationRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OtpConfigurationResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v1/otp/configuration/bulk:
-    post:
-      tags:
-      - OTP configuration Management
-      summary: Create or update otp configurations
-      operationId: createOrUpdate_1
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: "#/components/schemas/OtpConfigurationRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListResponseOtpConfigurationResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/users/{brand-identifier}/{uuid}/pin:
-    get:
-      tags:
-      - User Management
-      summary: Get pin for user authentication. Pin is valid for 48h
-      operationId: getUserCurrentPin
-      parameters:
-      - name: brand-identifier
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: Returns pin
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/IntegerResponse"
-        "404":
-          description: User not found
-          content:
-            application/json:
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v1/otp/configuration/list:
-    get:
-      tags:
-      - OTP configuration Management
-      summary: Find all otp configurations
-      operationId: findAll
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListResponseOtpConfigurationResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/notes/{brand-identifier}/{note-uuid}:
-    delete:
-      tags:
-      - User Notes Management
-      summary: Delete user note
-      operationId: deleteNotes
-      parameters:
-      - name: brand-identifier
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: note-uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: Successful Operation
-        "404":
-          description: The specified resource was not found
-          content:
-            application/json:
-              schema:
-                type: string
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v2/connection:
-    delete:
-      tags:
-      - Connected Accounts Management for Admins
-      summary: Delete connections to other users
-      operationId: deleteConnection
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserConnectionDeletionRequest"
-        required: true
-      responses:
-        "204":
-          description: No Content
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/user/admin/v1/otp/configuration/{uuid}:
-    delete:
-      tags:
-      - OTP configuration Management
-      summary: Delete otp configuration
-      operationId: delete
-      parameters:
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        "200":
-          description: OK
         "401":
           description: Unauthorized
           content:
@@ -1981,112 +853,18 @@ components:
           $ref: "#/components/schemas/BankAccountDetails"
       required:
       - password
-    UserDetailsUpdateRequest:
+    AuthenticationResponseV3:
       type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        nin:
-          type: string
-        nationality:
-          type: string
-        documentNr:
-          type: string
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
-    RemoveSelfExclusionRequest:
-      type: object
+      description: Response returned after successful authentication
       properties:
         userUuid:
           type: string
           format: uuid
-        userNote:
-          type: string
-          description: Comment on the reason of this action
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
-      required:
-      - userNote
-      - userUuid
-    CloseRequest:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        userNote:
-          type: string
-          description: Comment on the reason of this action
-        accountClosed:
-          type: boolean
-          description: Default value true. To open account set value to false
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
-      required:
-      - userNote
-      - userUuid
-    CloseResponse:
-      type: object
-      properties:
-        accountClosed:
-          type: boolean
-        banned:
-          type: boolean
-    BanRequest:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        userNote:
-          type: string
-          description: Comment on the reason of this action
-        banned:
-          type: boolean
-          description: Default value true. To unban user set value to false
-        bannedUntil:
-          type: string
-          format: date-time
-          description: "If banned is true, default value current time plus 100 years"
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
-      required:
-      - userNote
-      - userUuid
-    ArchiveRequest:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        userNote:
-          type: string
-          description: Comment on the reason of user deletion
-        brandIdentifier:
-          type: string
-          description: User's brand
-      required:
-      - userNote
-      - userUuid
-    UserNoteCreateRequest:
-      type: object
-      properties:
-        userUUID:
-          type: string
-          format: uuid
-        text:
-          type: string
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
+          description: Unique identifier of the authenticated user
+          example: 123e4567-e89b-12d3-a456-426614174000
     VerifyAndAuthenticateRequest:
       type: object
+      description: Request containing phone number and verification code
       properties:
         phoneNumber:
           type: string
@@ -2097,12 +875,6 @@ components:
       required:
       - phoneNumber
       - verificationCode
-    AuthenticationResponseV3:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
     ErrorResponse:
       type: object
       properties:
@@ -2118,20 +890,85 @@ components:
           type: object
           additionalProperties:
             type: object
-    SignUpRequestV2:
+    SignUpRequest:
       type: object
       properties:
         phoneNumber:
           type: string
+          description: User's phone number in international format
+          example: "+1234567890"
         password:
           type: string
+          description: User's password
           maxLength: 1000
           minLength: 4
+        firstName:
+          type: string
+          maxLength: 40
+          minLength: 2
+        lastName:
+          type: string
+          maxLength: 40
+          minLength: 2
+        nationality:
+          type: string
+        regionId:
+          type: integer
+          format: int32
+          description: Location code
+        identificationNumber:
+          type: string
+          description: Non-resident document / refugee card number
+        identificationType:
+          type: string
+          description: Type of identification document
+        dateOfBirth:
+          type: string
+          format: date
+          description: "The user’s date of birth, in ISO 8601 format (YYYY-MM-DD)"
+          example: 2021-12-31
       required:
       - password
       - phoneNumber
+    LimitsCollectionResponse:
+      type: object
+      description: Collection of rate limiting information for different operations
+      properties:
+        limit:
+          $ref: "#/components/schemas/LimitsResponse"
+          description: Primary rate limit information for the current operation
+        otherLimits:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/LimitsResponse"
+          description: "Additional rate limit information for related operations,\
+            \ keyed by operation name"
+    LimitsResponse:
+      type: object
+      description: Information about rate limiting for API operations
+      properties:
+        attemptsLimit:
+          type: integer
+          format: int32
+          description: Maximum number of attempts allowed within the period
+          example: 10
+        attemptsLeft:
+          type: integer
+          format: int32
+          description: Number of attempts remaining before being rate limited
+          example: 5
+        attemptsPeriodMin:
+          type: integer
+          format: int64
+          description: Period in minutes during which the attempts are counted
+          example: 60
+        allowed:
+          type: boolean
+          description: This flag indicates state of executed operation but not related
+            to next attempt.
     PasswordRequestV3:
       type: object
+      description: Password reset request containing phone number and reset method
       properties:
         phoneNumber:
           type: string
@@ -2143,33 +980,16 @@ components:
       required:
       - phoneNumber
       - resetMethodName
-    LimitsCollectionResponse:
+    VerifyOtpResponse:
       type: object
       properties:
-        limit:
-          $ref: "#/components/schemas/LimitsResponse"
-        otherLimits:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/LimitsResponse"
-    LimitsResponse:
-      type: object
-      properties:
-        attemptsLimit:
-          type: integer
-          format: int32
-        attemptsLeft:
-          type: integer
-          format: int32
-        attemptsPeriodMin:
-          type: integer
-          format: int64
-        allowed:
+        valid:
           type: boolean
-          description: This flag indicates state of executed operation but not related
-            to next attempt.
+        limits:
+          $ref: "#/components/schemas/LimitsResponse"
     VerifyOtpRequest:
       type: object
+      description: Request containing the phone number and OTP code to verify
       properties:
         phoneNumber:
           type: string
@@ -2180,15 +1000,10 @@ components:
       required:
       - otpCode
       - phoneNumber
-    VerifyOtpResponse:
-      type: object
-      properties:
-        valid:
-          type: boolean
-        limits:
-          $ref: "#/components/schemas/LimitsResponse"
     SetPasswordRequestV3:
       type: object
+      description: "Request containing phone number, OTP code, new password, and remember\
+        \ me flag"
       properties:
         phoneNumber:
           type: string
@@ -2212,53 +1027,26 @@ components:
         username:
           type: string
           description: Usually its a phone number
+          example: "+1234567890"
         password:
           type: string
+          description: User's password
         rememberMe:
           type: boolean
           description: "When true token will be saved for extended time, e.g. 30 days"
+          example: true
       required:
       - password
       - username
     ConnectedUserAuthenticationRequest:
       type: object
+      description: Request to authenticate as a connected user
       properties:
         connectedUserUuid:
           type: string
           format: uuid
-    AuthenticationResponse:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        forcePasswordUpdate:
-          type: boolean
-        phoneNumber:
-          type: string
-        region:
-          type: string
-        signedUpAt:
-          type: string
-          format: date-time
-        connectedUser:
-          type: array
-          items:
-            $ref: "#/components/schemas/ConnectedUserResponse"
-    ConnectedUserResponse:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        phoneNumber:
-          type: string
-        type:
-          type: string
-          enum:
-          - UNVERIFIED
-          - VERIFIED
-          - CONNECTED
+          description: UUID of the connected user account to switch to
+          example: 123e4567-e89b-12d3-a456-426614174000
     UserChangePasswordRequest:
       type: object
       properties:
@@ -2272,319 +1060,50 @@ components:
       - newPassword
     UserConnectionRequest:
       type: object
+      description: Request to initiate a connection with another user
       properties:
         otherPhoneNumber:
           type: string
+          description: Phone number of the user to connect with
+          example: "+1234567890"
+    ConnectedUserResponse:
+      type: object
+      description: Information about a connected user
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Unique identifier of the connected user
+          example: 123e4567-e89b-12d3-a456-426614174000
+        identifier:
+          type: string
+          description: Phone number or other identifier of the connected user
+          example: "+1234567890"
+        type:
+          type: string
+          description: Type of connection between users
+          enum:
+          - UNVERIFIED
+          - VERIFIED
+          - CONNECTED
+          example: CONNECTED
     ConnectedUsersResponse:
       type: object
+      description: Response containing a list of connected users
       properties:
         connectedUsers:
           type: array
+          description: List of users connected to the current user
           items:
             $ref: "#/components/schemas/ConnectedUserResponse"
     UserConnectionVerificationRequest:
       type: object
+      description: Request to verify a connection with verification code
       properties:
         verificationCode:
           type: string
-    UserDetailRequest:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        brandIdentifier:
-          type: string
-        archived:
-          type: boolean
-      required:
-      - brandIdentifier
-      - userUuid
-    NoteResponse:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        noteUuid:
-          type: string
-          format: uuid
-        userUuid:
-          type: string
-          format: uuid
-        Name:
-          type: string
-        Note:
-          type: string
-        Created:
-          type: string
-          format: date-time
-    UserDetailsResponse:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        username:
-          type: string
-        fullnameExternal:
-          type: string
-        fullnamesExternal:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/UserExternalName"
-        phoneNumber:
-          type: string
-        active:
-          type: boolean
-        name:
-          type: string
-        isoCountryCode:
-          type: string
-        brandIdentifier:
-          type: string
-        email:
-          type: string
-        banned:
-          type: boolean
-        bannedUntil:
-          type: string
-          format: date-time
-        accountClosed:
-          type: boolean
-        archived:
-          type: boolean
-        notes:
-          type: array
-          items:
-            $ref: "#/components/schemas/NoteResponse"
-        verified:
-          type: boolean
-        verifiedDate:
-          type: string
-          format: date-time
-        registrationDate:
-          type: string
-          format: date-time
-        firstname:
-          type: string
-        lastname:
-          type: string
-        nin:
-          type: string
-        nationality:
-          type: string
-        documentNr:
-          type: string
-        faceId:
-          type: string
-        values:
-          type: object
-          additionalProperties:
-            type: string
-    UserExternalName:
-      type: object
-      properties:
-        correspondent:
-          type: string
-        externalName:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-    Query:
-      type: object
-      properties:
-        brandIdentifier:
-          type: string
-        name:
-          type: string
-        phoneNumber:
-          type: string
-    UsersSearchRequest:
-      type: object
-      properties:
-        query:
-          $ref: "#/components/schemas/Query"
-        archived:
-          type: boolean
-        queryNullOrEmpty:
-          type: boolean
-    ListResponseUserSearchResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: "#/components/schemas/UserSearchResponse"
-    UserSearchResponse:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        brandIdentifier:
-          type: string
-    UserDetailsRequest:
-      type: object
-      properties:
-        userUuids:
-          type: array
-          items:
-            type: string
-            format: uuid
-        brandIdentifier:
-          type: string
-        archived:
-          type: boolean
-      required:
-      - brandIdentifier
-      - userUuids
-    ListResponseUserSearchDetailsResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: "#/components/schemas/UserSearchDetailsResponse"
-    UserSearchDetailsResponse:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        phoneNumber:
-          type: string
-        name:
-          type: string
-          example: alex.lexus
-        registrationDate:
-          type: string
-          format: date-time
-        lastSignIn:
-          type: string
-          format: date-time
-        brandIdentifier:
-          type: string
-    UserNoteResponse:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        userUuid:
-          type: string
-          format: uuid
-        note:
-          type: string
-        created:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-          format: uuid
-    UserNotesRequest:
-      type: object
-      properties:
-        userUUID:
-          type: string
-          format: uuid
-        brandIdentifier:
-          type: string
-          description: User's brand. For v2 endpoint only
-        skip:
-          type: integer
-          format: int32
-        take:
-          type: integer
-          format: int32
-          maximum: 100
-          minimum: 1
-      required:
-      - skip
-      - take
-      - userUUID
-    ListResponseUserNoteResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: "#/components/schemas/UserNoteResponse"
-    OtpConfigurationRequest:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        method:
-          type: string
-        brandIdentifier:
-          type: string
-        position:
-          type: integer
-          format: int32
-        activeUsersCallLimit:
-          type: integer
-          format: int32
-        inactiveUsersCallLimit:
-          type: integer
-          format: int32
-        callLimitDuration:
-          type: string
-        enabled:
-          type: boolean
-      required:
-      - activeUsersCallLimit
-      - brandIdentifier
-      - enabled
-      - inactiveUsersCallLimit
-      - method
-      - position
-    OtpConfigurationResponse:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-        brandIdentifier:
-          type: string
-        method:
-          type: string
-        position:
-          type: integer
-          format: int32
-        enabled:
-          type: boolean
-        activeUsersCallLimit:
-          type: integer
-          format: int32
-        inactiveUsersCallLimit:
-          type: integer
-          format: int32
-        callLimitDuration:
-          type: string
-    ListResponseOtpConfigurationResponse:
-      type: object
-      properties:
-        result:
-          type: array
-          items:
-            $ref: "#/components/schemas/OtpConfigurationResponse"
-    IntegerResponse:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int32
-    UserConnectionDeletionRequest:
-      type: object
-      properties:
-        userUuid:
-          type: string
-          format: uuid
-        brandIdentifier:
-          type: string
+          description: Verification code received by the other user
+          example: "123456"
   securitySchemes:
     Token:
       type: apiKey

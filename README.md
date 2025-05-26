@@ -6,7 +6,7 @@ This repository hosts the API documentation for our services using GitHub Pages 
 
 You can access the API documentation in two ways:
 
-1. **Visit the GitHub Pages site**: The documentation is hosted on GitHub Pages at the URL associated with this repository. The home page provides a link to the Pawa API UI.
+1. **Visit the GitHub Pages site**: The documentation is hosted on GitHub Pages at the URL associated with this repository https://aliengain.github.io/api-portal/. The home page provides a link to the Pawa API UI.
 
 2. **Run locally**:
    - Clone this repository
