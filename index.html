@@ -2,24 +2,522 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>API Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Portal - Pawa Documentation Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 2em; }
-        h1 { color: #333; }
-        pre { background: #f4f4f4; padding: 1em; }
+        :root {
+            --primary-blue: 82 100% 46%; /* #9ce800 */
+            --primary-blue-dark: 82 100% 40%; /* #85c700 */
+            --primary-blue-light: 82 100% 94%; /* #f4fce6 */
+            --success-green: 140 65% 45%; /* #2D8F47 */
+            --background: 210 11% 98%; /* #F5F7FA */
+            --surface: 0 0% 100%; /* #FFFFFF */
+            --text-primary: 220 13% 18%; /* #2C3E50 */
+            --text-secondary: 220 9% 46%; /* #64748B */
+            --text-muted: 220 9% 64%; /* #94A3B8 */
+            --border: 220 13% 91%; /* #E2E8F0 */
+            --shadow: 220 3% 15%; /* #1E293B with opacity */
+
+            /* Typography */
+            --font-family: 'Roboto', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+
+            /* Border radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: hsl(var(--background));
+            color: hsl(var(--text-primary));
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+        }
+
+        /* Header */
+        .header {
+            background: hsl(var(--surface));
+            border-bottom: 1px solid hsl(var(--border));
+            padding: var(--spacing-lg) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px 0 hsl(var(--shadow) / 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: hsl(var(--primary-blue));
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: var(--font-size-2xl);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-xl);
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: hsl(var(--text-secondary));
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: hsl(var(--primary-blue));
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .hero h1 {
+            font-size: var(--font-size-4xl);
+            font-weight: 800;
+            color: hsl(var(--text-primary));
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: var(--font-size-lg);
+            color: hsl(var(--text-secondary));
+            max-width: 600px;
+            margin: 0 auto var(--spacing-xl);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: hsl(var(--primary-blue));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: hsl(var(--primary-blue-dark));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px hsl(var(--primary-blue) / 0.3);
+        }
+
+        .btn-secondary {
+            background: hsl(var(--surface));
+            color: hsl(var(--text-primary));
+            border: 1px solid hsl(var(--border));
+        }
+
+        .btn-secondary:hover {
+            background: hsl(var(--primary-blue-light));
+            border-color: hsl(var(--primary-blue));
+            color: hsl(var(--primary-blue));
+        }
+
+        /* Grid layout */
+        .grid {
+            display: grid;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        }
+
+
+
+
+        .card h2 {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: hsl(var(--text-primary));
+            margin: 0;
+        }
+
+        .card p {
+            color: hsl(var(--text-secondary));
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+
+        /* Documentation navigation */
+        .docs-nav {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            background: hsl(var(--surface));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-sm);
+        }
+
+        .docs-tab {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: hsl(var(--text-secondary));
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            justify-content: flex-start;
+            text-decoration: none;
+        }
+
+        .docs-tab:hover {
+            background: hsl(var(--primary-blue-light));
+            color: hsl(var(--primary-blue));
+            text-decoration: none;
+        }
+
+
+        .quick-start h3 {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: hsl(var(--text-primary));
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .quick-start p {
+            font-size: var(--font-size-lg);
+            color: hsl(var(--text-secondary));
+            margin-bottom: var(--spacing-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: hsl(var(--text-primary));
+            color: hsl(var(--text-muted));
+            padding: var(--spacing-2xl) 0;
+            margin-top: var(--spacing-3xl);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: hsl(var(--text-muted));
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: hsl(var(--primary-blue-light));
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: var(--font-size-3xl);
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: var(--spacing-lg);
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+        }
+
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+
+        /* Focus styles for accessibility */
+        .btn:focus,
+        .copy-btn:focus,
+        .iframe-btn:focus {
+            outline: 2px solid hsl(var(--primary-blue));
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to the API Portal</h1>
-    <p>This site hosts the Pawa API documentation for our services.</p>
-    <p>
-        <a href="pawa-api.html">Open the Pawa API UI</a>
-    </p>
-    <h2>Prompt Examples for Replit</h2>
-    <p>Use the following prompt in <a href="https://replit.com/">Replit</a> to quickly start a mini app that interacts with the API described in the Pawa API docs.</p>
-    <pre>
-    You are developing a small Java app on Replit.
-    Full example here ....
-    </pre>
+<!-- Header -->
+<header class="header">
+    <div class="header-container">
+        <a href="#" class="logo">
+            <i class="fas fa-code"></i>
+            <span>Pawa API Portal</span>
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#documentation">Documentation</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#quick-start">Quick Start</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Main content -->
+<main class="container">
+    <!-- Hero section -->
+    <section class="hero">
+        <h1>Welcome to the Pawa API Portal</h1>
+        <p>Your comprehensive hub for Pawa API documentation, examples, and integration guides. Get started with our
+            powerful APIs in minutes.</p>
+        <div class="hero-actions">
+            <a href="#documentation" class="btn btn-primary">
+                <i class="fas fa-rocket"></i>
+                Get Started
+            </a>
+
+        </div>
+    </section>
+
+
+    <!-- Documentation Navigation -->
+    <div class="docs-nav">
+        <a href="pawa-api.html" target="_blank" class="docs-tab">
+            <i class="fas fa-code"></i>
+            API Documentation
+            <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: auto;"></i>
+        </a>
+        <a href="https://pawa-blo-x-tomaszwlodarcz4.replit.app/how-to-use" target="_blank" class="docs-tab">
+            <i class="fas fa-palette"></i>
+            Design System
+            <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: auto;"></i>
+        </a>
+    </div>
+
+    <!-- Main grid -->
+
+
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="support">
+    <div class="footer-container">
+        <div class="footer-links">
+            <a href="#documentation">Documentation</a>
+            <a href="#examples">Examples</a>
+            <a href="#" target="_blank">API Reference</a>
+            <a href="#" target="_blank">GitHub</a>
+            <a href="#" target="_blank">Support</a>
+            <a href="#" target="_blank">Status Page</a>
+        </div>
+        <p>&copy; 2025 Pawa API Portal. Built with modern web standards for developers.</p>
+    </div>
+</footer>
+
+<script>
+
+    // Smooth scrolling for navigation links
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('a[href^="#"]');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight - 20;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+
+    // Add loading states and error handling for iframe
+    document.addEventListener('DOMContentLoaded', function () {
+        const iframe = document.getElementById('api-iframe');
+
+        iframe.addEventListener('load', function () {
+            // Iframe loaded successfully
+            console.log('API documentation loaded successfully');
+        });
+
+        iframe.addEventListener('error', function () {
+            // Handle iframe loading errors
+            console.error('Failed to load API documentation');
+            const container = iframe.parentElement;
+            container.innerHTML = `
+                    <div style="padding: var(--spacing-xl); text-align: center; color: hsl(var(--text-muted));">
+                        <i class="fas fa-exclamation-triangle" style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-md);"></i>
+                        <p>Unable to load API documentation. Please check if the documentation file exists.</p>
+                        <button class="btn btn-secondary" onclick="location.reload()">
+                            <i class="fas fa-refresh"></i>
+                            Retry
+                        </button>
+                    </div>
+                `;
+        });
+    });
+
+    // Enhanced accessibility
+    document.addEventListener('keydown', function (e) {
+        // Allow escape key to close modals or reset focus
+        if (e.key === 'Escape') {
+            document.activeElement.blur();
+        }
+    });
+
+    // Add intersection observer for animation on scroll (optional enhancement)
+    if ('IntersectionObserver' in window) {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe cards for subtle animation
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    }
+</script>
 </body>
 </html>
