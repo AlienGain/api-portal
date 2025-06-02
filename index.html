@@ -3,520 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Portal - Pawa Documentation Hub</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-blue: 82 100% 46%; /* #9ce800 */
-            --primary-blue-dark: 82 100% 40%; /* #85c700 */
-            --primary-blue-light: 82 100% 94%; /* #f4fce6 */
-            --success-green: 140 65% 45%; /* #2D8F47 */
-            --background: 210 11% 98%; /* #F5F7FA */
-            --surface: 0 0% 100%; /* #FFFFFF */
-            --text-primary: 220 13% 18%; /* #2C3E50 */
-            --text-secondary: 220 9% 46%; /* #64748B */
-            --text-muted: 220 9% 64%; /* #94A3B8 */
-            --border: 220 13% 91%; /* #E2E8F0 */
-            --shadow: 220 3% 15%; /* #1E293B with opacity */
-
-            /* Typography */
-            --font-family: 'Roboto', sans-serif;
-            --font-size-xs: 0.75rem;
-            --font-size-sm: 0.875rem;
-            --font-size-base: 1rem;
-            --font-size-lg: 1.125rem;
-            --font-size-xl: 1.25rem;
-            --font-size-2xl: 1.5rem;
-            --font-size-3xl: 1.875rem;
-            --font-size-4xl: 2.25rem;
-
-            /* Spacing */
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-2xl: 3rem;
-            --spacing-3xl: 4rem;
-
-            /* Border radius */
-            --radius-sm: 0.375rem;
-            --radius-md: 0.5rem;
-            --radius-lg: 0.75rem;
-            --radius-xl: 1rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-family);
-            background-color: hsl(var(--background));
-            color: hsl(var(--text-primary));
-            line-height: 1.6;
-            font-size: var(--font-size-base);
-        }
-
-        /* Header */
-        .header {
-            background: hsl(var(--surface));
-            border-bottom: 1px solid hsl(var(--border));
-            padding: var(--spacing-lg) 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px 0 hsl(var(--shadow) / 0.1);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-lg);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            font-size: var(--font-size-xl);
-            font-weight: 700;
-            color: hsl(var(--primary-blue));
-            text-decoration: none;
-        }
-
-        .logo i {
-            font-size: var(--font-size-2xl);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: var(--spacing-xl);
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: hsl(var(--text-secondary));
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: hsl(var(--primary-blue));
-        }
-
-        /* Main container */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--spacing-2xl) var(--spacing-lg);
-        }
-
-        /* Hero section */
-        .hero {
-            text-align: center;
-            margin-bottom: var(--spacing-3xl);
-        }
-
-        .hero h1 {
-            font-size: var(--font-size-4xl);
-            font-weight: 800;
-            color: hsl(var(--text-primary));
-            margin-bottom: var(--spacing-md);
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: var(--font-size-lg);
-            color: hsl(var(--text-secondary));
-            max-width: 600px;
-            margin: 0 auto var(--spacing-xl);
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-base);
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: hsl(var(--primary-blue));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: hsl(var(--primary-blue-dark));
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px hsl(var(--primary-blue) / 0.3);
-        }
-
-        .btn-secondary {
-            background: hsl(var(--surface));
-            color: hsl(var(--text-primary));
-            border: 1px solid hsl(var(--border));
-        }
-
-        .btn-secondary:hover {
-            background: hsl(var(--primary-blue-light));
-            border-color: hsl(var(--primary-blue));
-            color: hsl(var(--primary-blue));
-        }
-
-        /* Grid layout */
-        .grid {
-            display: grid;
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-3xl);
-        }
-
-        .grid-2 {
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-        }
-
-
-
-
-        .card h2 {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            color: hsl(var(--text-primary));
-            margin: 0;
-        }
-
-        .card p {
-            color: hsl(var(--text-secondary));
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.6;
-        }
-
-
-        /* Documentation navigation */
-        .docs-nav {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-xl);
-            background: hsl(var(--surface));
-            border: 1px solid hsl(var(--border));
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-sm);
-        }
-
-        .docs-tab {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-md) var(--spacing-lg);
-            border: none;
-            border-radius: var(--radius-md);
-            background: transparent;
-            color: hsl(var(--text-secondary));
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            flex: 1;
-            justify-content: flex-start;
-            text-decoration: none;
-        }
-
-        .docs-tab:hover {
-            background: hsl(var(--primary-blue-light));
-            color: hsl(var(--primary-blue));
-            text-decoration: none;
-        }
-
-
-        .quick-start h3 {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            color: hsl(var(--text-primary));
-            margin-bottom: var(--spacing-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-sm);
-        }
-
-        .quick-start p {
-            font-size: var(--font-size-lg);
-            color: hsl(var(--text-secondary));
-            margin-bottom: var(--spacing-xl);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Footer */
-        .footer {
-            background: hsl(var(--text-primary));
-            color: hsl(var(--text-muted));
-            padding: var(--spacing-2xl) 0;
-            margin-top: var(--spacing-3xl);
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-lg);
-            text-align: center;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-lg);
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: hsl(var(--text-muted));
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: hsl(var(--primary-blue-light));
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: var(--spacing-md);
-                text-align: center;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero h1 {
-                font-size: var(--font-size-3xl);
-            }
-
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                padding: var(--spacing-lg);
-            }
-            .footer-links {
-                flex-direction: column;
-                gap: var(--spacing-md);
+    <title>Hackathon 2025 - Build Something Amazing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#84cc16',
+                        secondary: '#65a30d'
+                    }
+                }
             }
         }
-
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-
-
-        /* Focus styles for accessibility */
-        .btn:focus,
-        .copy-btn:focus,
-        .iframe-btn:focus {
-            outline: 2px solid hsl(var(--primary-blue));
-            outline-offset: 2px;
-        }
-    </style>
+    </script>
 </head>
-<body>
+<body class="bg-gray-50">
 <!-- Header -->
-<header class="header">
-    <div class="header-container">
-        <a href="#" class="logo">
-            <i class="fas fa-code"></i>
-            <span>Pawa API Portal</span>
-        </a>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#documentation">Documentation</a></li>
-                <li><a href="#examples">Examples</a></li>
-                <li><a href="#quick-start">Quick Start</a></li>
-                <li><a href="#support">Support</a></li>
-            </ul>
-        </nav>
-    </div>
+<header class="bg-white shadow-sm border-b">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-primary">
+                    🚀 Hackathon 2025
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <a href="#agenda" class="text-gray-600 hover:text-primary transition-colors">Agenda</a>
+                    <a href="#rules" class="text-gray-600 hover:text-primary transition-colors">Rules</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </header>
 
-<!-- Main content -->
-<main class="container">
-    <!-- Hero section -->
-    <section class="hero">
-        <h1>Welcome to the Pawa API Portal</h1>
-        <p>This site hosts the Pawa API documentation for our services.</p>
-        <div class="hero-actions">
-            <a href="#documentation" class="btn btn-primary">
-                <i class="fas fa-rocket"></i>
-                Get Started
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-primary/10 to-secondary/10 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Hackathon 2025
+        </h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Join us for an exciting 2-day hackathon where innovation meets creativity.
+            Build something amazing, collaborate with talented developers, and compete for incredible prizes!
+        </p>
+        <!-- Documentation Navigation -->
+        <div class="docs-nav flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto">
+            <a href="pawa-api.html" target="_blank" class="docs-tab bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-4 px-6 rounded-lg transition-colors flex items-center justify-between shadow-sm">
+                <div class="flex items-center">
+                    <i class="fas fa-code mr-3"></i>
+                    API Documentation
+                </div>
+                <i class="fas fa-external-link-alt text-sm ml-4"></i>
             </a>
-
+            <a href="https://pawablox-design-system.replit.app/how-to-use" target="_blank" class="docs-tab bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold py-4 px-6 rounded-lg transition-colors flex items-center justify-between shadow-sm">
+                <div class="flex items-center">
+                    <i class="fas fa-palette mr-3"></i>
+                    Design System
+                </div>
+                <i class="fas fa-external-link-alt text-sm ml-4"></i>
+            </a>
         </div>
-    </section>
-
-
-    <!-- Documentation Navigation -->
-    <div class="docs-nav">
-        <a href="pawa-api.html" target="_blank" class="docs-tab">
-            <i class="fas fa-code"></i>
-            API Documentation
-            <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: auto;"></i>
-        </a>
-        <a href="https://pawa-blo-x-tomaszwlodarcz4.replit.app/how-to-use" target="_blank" class="docs-tab">
-            <i class="fas fa-palette"></i>
-            Design System
-            <i class="fas fa-external-link-alt" style="font-size: 0.8em; margin-left: auto;"></i>
-        </a>
     </div>
+</section>
 
-    <!-- Main grid -->
+<!-- Key Dates -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">📅 Key Dates</h2>
+            <p class="text-gray-600">Mark your calendars and get ready for an amazing experience!</p>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-primary">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🧠</span>
+                    <h3 class="font-semibold text-gray-900">Idea Gathering</h3>
+                </div>
+                <p class="text-gray-600 mb-2">May 30, 2025</p>
+                <p class="text-sm text-gray-500">Start brainstorming and gathering your innovative ideas</p>
+            </div>
 
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-primary">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🤝</span>
+                    <h3 class="font-semibold text-gray-900">Team Formation</h3>
+                </div>
+                <p class="text-gray-600 mb-2">June 5, 2025</p>
+                <p class="text-sm text-gray-500">Find your perfect team members and form your squad</p>
+            </div>
 
-</main>
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-primary">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🏁</span>
+                    <h3 class="font-semibold text-gray-900">Kickoff Meeting</h3>
+                </div>
+                <p class="text-gray-600 mb-2">June 11, 09:00</p>
+                <p class="text-sm text-gray-500">Teams meet in person at Tallinn Office (Jõe 4a, 4th floor)</p>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-secondary">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🔨</span>
+                    <h3 class="font-semibold text-gray-900">Hacking Begins</h3>
+                </div>
+                <p class="text-gray-600 mb-2">June 11, 09:30</p>
+                <p class="text-sm text-gray-500">Let the coding marathon begin!</p>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-red-500">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🛑</span>
+                    <h3 class="font-semibold text-gray-900">Hacking Ends</h3>
+                </div>
+                <p class="text-gray-600 mb-2">June 12, 16:00</p>
+                <p class="text-sm text-gray-500">Time's up! Submit your amazing projects</p>
+            </div>
+
+            <div class="bg-gray-50 p-6 rounded-lg border-l-4 border-blue-500">
+                <div class="flex items-center mb-3">
+                    <span class="text-2xl mr-3">🎤</span>
+                    <h3 class="font-semibold text-gray-900">Demos & Voting</h3>
+                </div>
+                <p class="text-gray-600 mb-2">June 12, 16:30</p>
+                <p class="text-sm text-gray-500">Present your projects online and vote for favorites</p>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <div class="bg-gradient-to-r from-primary to-secondary p-6 rounded-lg text-white">
+                <div class="flex items-center justify-center mb-3">
+                    <span class="text-3xl mr-3">🏆</span>
+                    <h3 class="text-xl font-bold">Prize Ceremony</h3>
+                </div>
+                <p class="text-lg">June 13, 2025 @ Summer Days</p>
+                <p class="text-sm opacity-90 mt-2">Celebrate the winners and amazing achievements!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Rules & Guidelines -->
+<section id="rules" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">📋 Rules & Guidelines</h2>
+            <p class="text-gray-600">Fair play and creativity guidelines for all participants</p>
+        </div>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">✅ What's Allowed</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start"><span class="text-primary mr-2">•</span>Teams of 2-5 members</li>
+                    <li class="flex items-start"><span class="text-primary mr-2">•</span>Use any programming language or framework</li>
+                    <li class="flex items-start"><span class="text-primary mr-2">•</span>Open source libraries and APIs</li>
+                    <li class="flex items-start"><span class="text-primary mr-2">•</span>Pre-existing code as building blocks</li>
+                    <li class="flex items-start"><span class="text-primary mr-2">•</span>AI tools for assistance</li>
+                </ul>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">❌ Not Allowed</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li class="flex items-start"><span class="text-red-500 mr-2">•</span>Submitting pre-built projects</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2">•</span>Working before the official start time</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2">•</span>Plagiarism or copying others' work</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2">•</span>Inappropriate or offensive content</li>
+                    <li class="flex items-start"><span class="text-red-500 mr-2">•</span>Late submissions after deadline</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Footer -->
-<footer class="footer" id="support">
-    <div class="footer-container">
-        <div class="footer-links">
-            <a href="#documentation">Documentation</a>
-            <a href="#examples">Examples</a>
-            <a href="#" target="_blank">API Reference</a>
-            <a href="#" target="_blank">GitHub</a>
-            <a href="#" target="_blank">Support</a>
-            <a href="#" target="_blank">Status Page</a>
+<footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Hackathon 2025</h4>
+                <p class="text-gray-400 text-sm">Building the future, one hack at a time.</p>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#agenda" class="hover:text-primary transition-colors">Agenda</a></li>
+                    <li><a href="#rules" class="hover:text-primary transition-colors">Rules</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-primary transition-colors">API Documentation</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Design System</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Code Examples</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">Twitter</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">GitHub</a>
+                    <a href="#" class="text-gray-400 hover:text-primary transition-colors">LinkedIn</a>
+                </div>
+            </div>
         </div>
-        <p>&copy; 2025 Pawa API Portal. Built with modern web standards for developers.</p>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+            <p class="text-gray-400 text-sm">© 2025 Hackathon 2025. Built with modern web standards for developers.</p>
+        </div>
     </div>
 </footer>
 
 <script>
-
     // Smooth scrolling for navigation links
-    document.addEventListener('DOMContentLoaded', function () {
-        const navLinks = document.querySelectorAll('a[href^="#"]');
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-
-                if (targetElement) {
-                    const headerHeight = document.querySelector('.header').offsetHeight;
-                    const targetPosition = targetElement.offsetTop - headerHeight - 20;
-
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
     });
 
-    // Add loading states and error handling for iframe
-    document.addEventListener('DOMContentLoaded', function () {
-        const iframe = document.getElementById('api-iframe');
-
-        iframe.addEventListener('load', function () {
-            // Iframe loaded successfully
-            console.log('API documentation loaded successfully');
-        });
-
-        iframe.addEventListener('error', function () {
-            // Handle iframe loading errors
-            console.error('Failed to load API documentation');
-            const container = iframe.parentElement;
-            container.innerHTML = `
-                    <div style="padding: var(--spacing-xl); text-align: center; color: hsl(var(--text-muted));">
-                        <i class="fas fa-exclamation-triangle" style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-md);"></i>
-                        <p>Unable to load API documentation. Please check if the documentation file exists.</p>
-                        <button class="btn btn-secondary" onclick="location.reload()">
-                            <i class="fas fa-refresh"></i>
-                            Retry
-                        </button>
-                    </div>
-                `;
+    // Add some interactivity to buttons
+    document.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Add click animation
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
         });
     });
-
-    // Enhanced accessibility
-    document.addEventListener('keydown', function (e) {
-        // Allow escape key to close modals or reset focus
-        if (e.key === 'Escape') {
-            document.activeElement.blur();
-        }
-    });
-
-    // Add intersection observer for animation on scroll (optional enhancement)
-    if ('IntersectionObserver' in window) {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe cards for subtle animation
-        document.querySelectorAll('.card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-    }
 </script>
 </body>
 </html>
