@@ -24,147 +24,30 @@ info:
     It allows to set limit for route ID and provided brand identifier (x-pawa-brand\
     \ header) pair \n\n* Also, extended http cals metric is provided. The metric **http_server_requests_branded**\
     \ will have status code, route ID and brand identifier in tags"
-  version: 0.891.0
+  version: 0.914.0
 servers:
-- url: https://api.ingress.betpawa.com
-  description: Generated server url
+  - url: https://api.develop.qa.verekuu.com
+    description: Generated server url
 security:
-- Token: []
-  Brand: []
+  - Token: []
+    Brand: []
 tags:
-- name: Session
-  description: Managing user active sessions
-- name: Auth
-  description: Managing user sessions
+  - name: Logout
+    description: Handles user logout
+  - name: Token Management
+    description: Managing user tokens
 paths:
   /api/auth/v1/logout:
     post:
       tags:
-      - Auth
-      summary: "User logout, invalidates token which is taken from the cookie"
+        - Logout
+      summary: User logout
+      description: Invalidates user token which is taken from the cookie and logs
+        the user out of the system
       operationId: logout
       responses:
         "200":
-          description: OK
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-  /api/session/admin/v1/user/{brand}/{uuid}:
-    get:
-      tags:
-      - Session
-      summary: Get user active sessions
-      operationId: getUserActiveSessions
-      parameters:
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: brand
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserSessionResponse"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-        "500":
-          description: Server Error
-          content:
-            application/json:
-              schema:
-                properties:
-                  error:
-                    type: string
-                  uuid:
-                    type: string
-                  params:
-                    type: array
-                    items:
-                      type: string
-                  payload:
-                    type: object
-                    additionalProperties:
-                      type: object
-    delete:
-      tags:
-      - Session
-      summary: Delete user active sessions
-      operationId: deleteUserActiveSessions
-      parameters:
-      - name: uuid
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      - name: brand
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
+          description: User successfully logged out
         "401":
           description: Unauthorized
           content:
@@ -204,13 +87,14 @@ paths:
   /api/auth/v1/token/validate:
     get:
       tags:
-      - Auth
-      summary: "Validates token from the cookie, valid token means that user is logged\
-        \ in to the system."
+        - Token Management
+      summary: Validate user token
+      description: "Validates token from the cookie, valid token means that user is\
+        \ logged in to the system."
       operationId: validate
       responses:
         "200":
-          description: OK
+          description: Token is valid
         "401":
           description: Unauthorized
           content:
@@ -248,12 +132,6 @@ paths:
                     additionalProperties:
                       type: object
 components:
-  schemas:
-    UserSessionResponse:
-      type: object
-      properties:
-        expiration:
-          type: string
   securitySchemes:
     Token:
       type: apiKey

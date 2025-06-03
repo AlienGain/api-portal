@@ -12,38 +12,34 @@ info:
     \ password. If value is not set then default language is English (code = **en**).\n"
   version: 1.180.0
 servers:
-- url: https://api.develop.qa.verekuu.com
-  description: Generated server url
+  - url: https://api.develop.qa.verekuu.com
+    description: Generated server url
 security:
-- Token: []
-  Brand: []
+  - Token: []
+    Brand: []
 tags:
-- name: User derived data administration
-  description: Derived values for specific user
-- name: Component data
-  description: Aggregation of data from multiple services
-- name: Preregistration
-  description: Preregisters users in new markets
-- name: User derived data
-  description: Derived values for specific user
-- name: Derived Data Metadata
-  description: Key specific configurations
+  - name: Component data
+    description: Aggregation of data from multiple services
+  - name: Preregistration
+    description: Preregisters users in new markets
+  - name: User derived data
+    description: Derived values for specific user
 paths:
   /api/preference/v1/user-derived-data:
     get:
       tags:
-      - User derived data
+        - User derived data
       summary: Get all user data
       description: Return all derived data for current user
       operationId: getUserDerivedData
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDerivedDataResponse'
-        '400':
+                $ref: "#/components/schemas/UserDerivedDataResponse"
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -61,7 +57,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -79,7 +75,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '500':
+        "500":
           description: Server Error
           content:
             application/json:
@@ -99,7 +95,7 @@ paths:
                       type: object
     put:
       tags:
-      - User derived data
+        - User derived data
       summary: Update specified user data
       description: Add or update user derived value. If key exists then value will
         be overridden
@@ -108,12 +104,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddUserDerivedDataRequest'
+              $ref: "#/components/schemas/AddUserDerivedDataRequest"
         required: true
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -131,7 +127,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -149,7 +145,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '500':
+        "500":
           description: Server Error
           content:
             application/json:
@@ -170,7 +166,7 @@ paths:
   /api/preference/v1/preregistration:
     put:
       tags:
-      - Preregistration
+        - Preregistration
       summary: Preregister user
       description: Preregister user in new market
       operationId: preregisterUser
@@ -178,12 +174,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PreregistrationRequest'
+              $ref: "#/components/schemas/PreregistrationRequest"
         required: true
       responses:
-        '200':
+        "200":
           description: User preregistered successfully
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -201,7 +197,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -219,7 +215,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '500':
+        "500":
           description: Server Error
           content:
             application/json:
@@ -240,33 +236,33 @@ paths:
   /api/preference/v1/component-data:
     post:
       tags:
-      - Component data
+        - Component data
       summary: Aggregates and returns initial settings for front-end and user derived
         data as JSON object
       operationId: componentData
       parameters:
-      - name: x-pawa-language
-        in: header
-        required: false
-        schema:
-          type: string
-          default: en
+        - name: x-pawa-language
+          in: header
+          required: false
+          schema:
+            type: string
+            default: en
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ComponentDataRequest'
+              $ref: "#/components/schemas/ComponentDataRequest"
         required: true
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
                 additionalProperties:
-                  $ref: '#/components/schemas/JsonNode'
-        '400':
+                  $ref: "#/components/schemas/JsonNode"
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -284,7 +280,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -302,7 +298,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '500':
+        "500":
           description: Server Error
           content:
             application/json:
@@ -323,30 +319,30 @@ paths:
   /api/preference/v1/user-derived-data/{data-key}:
     get:
       tags:
-      - User derived data
+        - User derived data
       summary: Get specified user data
       description: Return derived data by key for current user
       operationId: getUserDerivedDataByKey
       parameters:
-      - name: data-key
-        in: path
-        required: true
-        schema:
-          type: string
+        - name: data-key
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserDerivedDataByKeyResponse'
-        '404':
+                $ref: "#/components/schemas/UserDerivedDataByKeyResponse"
+        "404":
           description: The specified resource was not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '400':
+                $ref: "#/components/schemas/ErrorResponse"
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -364,7 +360,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -382,7 +378,7 @@ paths:
                     type: object
                     additionalProperties:
                       type: object
-        '500':
+        "500":
           description: Server Error
           content:
             application/json:
@@ -416,81 +412,20 @@ components:
           description: Desired value for specified field. Can't be empty
           example: en
       required:
-      - key
-      - value
+        - key
+        - value
     PreregistrationRequest:
       type: object
       description: Data transfer object for preregistration request
       example:
-        phoneNumber: '+1234567890'
+        phoneNumber: "+1234567890"
       properties:
         phoneNumber:
           type: string
           description: User's phone number in E.164 format
-          example: '+1234567890'
+          example: "+1234567890"
       required:
-      - phoneNumber
-    DerivedDataMetadataDto:
-      type: object
-      properties:
-        keyName:
-          type: string
-          description: Immutable Key name for 'UserDerivedData' values
-        accessModifier:
-          type: string
-          description: Access modifier for 'UserDerivedData' values
-          enum:
-          - PUBLIC
-          - PROTECTED
-          - PRIVATE
-        specification:
-          type: string
-          description: Description for 'UserDerivedData' values
-        type:
-          type: string
-          description: Type of the value
-          enum:
-          - BOOLEAN
-          - NUMBER
-          - STRING
-      required:
-      - accessModifier
-      - keyName
-    UserComponentRequest:
-      type: object
-      properties:
-        host:
-          type: string
-        port:
-          type: integer
-          format: int32
-        cacheInSeconds:
-          type: integer
-          format: int32
-        brandIdentifier:
-          type: string
-      required:
-      - brandIdentifier
-      - cacheInSeconds
-      - host
-      - port
-    BrandComponentRequest:
-      type: object
-      properties:
-        brandIdentifier:
-          type: string
-        language:
-          type: string
-          description: Leave it blank if no translations needed
-        data:
-          type: string
-          description: Static data as JSON for the component.
-          example:
-            key: value
-      required:
-      - brandIdentifier
-      - data
-      - language
+        - phoneNumber
     ComponentDataRequest:
       type: object
       description: Request specified components from component data
@@ -503,45 +438,6 @@ components:
           uniqueItems: true
     JsonNode:
       type: object
-    DerivedDataMetadataForMultipleBrandsRequest:
-      type: object
-      properties:
-        brands:
-          type: array
-          items:
-            type: string
-        derivedDataMetadataDto:
-          $ref: '#/components/schemas/DerivedDataMetadataDto'
-      required:
-      - brands
-    MetadataChangesSearchRequest:
-      type: object
-      properties:
-        key:
-          type: string
-    ChangeRecord:
-      type: object
-      properties:
-        changeType:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        propertyName:
-          type: string
-        left:
-          type: object
-        right:
-          type: object
-        author:
-          type: string
-    MetadataChanges:
-      type: object
-      properties:
-        changes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChangeRecord'
     UserDerivedDataResponse:
       type: object
       properties:
@@ -571,28 +467,6 @@ components:
           type: string
         value:
           type: string
-    MetadataList:
-      type: object
-      properties:
-        list:
-          type: array
-          items:
-            $ref: '#/components/schemas/DerivedDataMetadataDto'
-    AbstractComponentResponse:
-      type: object
-      properties:
-        name:
-          type: string
-        brandIdentifier:
-          type: string
-    DeleteDerivedDataMetadataDto:
-      type: object
-      properties:
-        keyName:
-          type: string
-          description: Immutable Key name for 'UserDerivedData' values
-      required:
-      - keyName
   securitySchemes:
     Token:
       type: apiKey

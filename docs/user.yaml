@@ -59,25 +59,25 @@ info:
     The password cannot match the OTP code\")  \nUSER_ALREADY_ARCHIVED (\"User %s\
     \ is already archived\")  \nUSER_ALREADY_ACTIVE (\"User %s is already active\"\
     )"
-  version: develop
+  version: 2.201.0
 servers:
-- url: http://localhost:17640
-  description: Generated server url
+  - url: https://api.develop.qa.verekuu.com
+    description: Generated server url
 security:
-- Token: []
-  Brand: []
+  - Token: []
+    Brand: []
 tags:
-- name: Authentication
-  description: Managing user sessions
-- name: Connected Accounts Management
-  description: API endpoints for connecting different user accounts
-- name: User Account Management
-  description: "API endpoints for password change, restore and verification management"
+  - name: Authentication
+    description: Managing user sessions
+  - name: Connected Accounts Management
+    description: API endpoints for connecting different user accounts
+  - name: User Account Management
+    description: "API endpoints for password change, restore and verification management"
 paths:
   /api/user/v1/self-exclude:
     put:
       tags:
-      - User Account Management
+        - User Account Management
       summary: Self excludes user. User will be logged out and wont be able to log
         in.
       operationId: selfExclude
@@ -129,7 +129,7 @@ paths:
   /api/user/v3/verify-and-authenticate:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: Completes user's phone number verification by code sent in message
       description: This endpoint verifies the user's phone number using the verification
         code they received and authenticates the user in a single step. It's the final
@@ -195,7 +195,7 @@ paths:
   /api/user/v3/signup-and-authenticate:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: Creates and automatically logs in user in the system.
       description: |
         Create user with specified phone number and password.
@@ -267,7 +267,7 @@ paths:
   /api/user/v3/request-verification-code:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: User requests his verification code from list of available methods
       description: "This endpoint allows a user to request a verification code. The\
         \ message with the code will be sent by the selected method (SMS, email, etc.).\
@@ -328,7 +328,7 @@ paths:
   /api/user/v3/password/verify-otp:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: Checks received OTP code for validity
       description: This endpoint verifies if the OTP code provided by the user is
         valid. It's used as part of the password reset flow.
@@ -393,7 +393,7 @@ paths:
   /api/user/v3/password/update-and-authenticate:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: Authenticates user based on provided OTP code and updates password
       description: "This endpoint allows a user to set a new password and authenticate\
         \ in a single step, using the OTP code they received. It's the final step\
@@ -459,7 +459,7 @@ paths:
   /api/user/v3/password/request-otp:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: User requests it's password to be reset. One-time password will be
         send according to selected method
       description: "This endpoint allows a user to request a password reset. An OTP\
@@ -521,7 +521,7 @@ paths:
   /api/user/v3/authenticate:
     post:
       tags:
-      - Authentication
+        - Authentication
       summary: Authenticates user based on provided credentials. Endpoint will limit
         requests for user for some tine in case of many unsuccessful attempts.
       operationId: authenticate
@@ -585,7 +585,7 @@ paths:
   /api/user/v1/switch:
     post:
       tags:
-      - Connected Accounts Management
+        - Connected Accounts Management
       summary: Switch to a connected user account
       description: |
         Authenticates as a connected user based on the token of the currently logged-in user.
@@ -654,7 +654,7 @@ paths:
   /api/user/v1/password:
     post:
       tags:
-      - User Account Management
+        - User Account Management
       summary: User change password. In password update form
       operationId: changePassword
       requestBody:
@@ -705,7 +705,7 @@ paths:
   /api/user/v1/connection:
     post:
       tags:
-      - Connected Accounts Management
+        - Connected Accounts Management
       summary: Create connection to other user
       description: Initiates a connection between the current user and another user
         identified by phone number. The connection starts in an unverified state and
@@ -769,7 +769,7 @@ paths:
   /api/user/v1/connection/verify:
     post:
       tags:
-      - Connected Accounts Management
+        - Connected Accounts Management
       summary: Verify connection to other user
       description: "Completes the connection verification process between users by\
         \ validating the verification code. Once verified, users can switch between\
@@ -852,7 +852,7 @@ components:
         bankAccountDetails:
           $ref: "#/components/schemas/BankAccountDetails"
       required:
-      - password
+        - password
     AuthenticationResponseV3:
       type: object
       description: Response returned after successful authentication
@@ -873,8 +873,8 @@ components:
           type: string
           description: Verification code from message
       required:
-      - phoneNumber
-      - verificationCode
+        - phoneNumber
+        - verificationCode
     ErrorResponse:
       type: object
       properties:
@@ -928,8 +928,8 @@ components:
           description: "The user’s date of birth, in ISO 8601 format (YYYY-MM-DD)"
           example: 2021-12-31
       required:
-      - password
-      - phoneNumber
+        - password
+        - phoneNumber
     LimitsCollectionResponse:
       type: object
       description: Collection of rate limiting information for different operations
@@ -978,8 +978,8 @@ components:
           description: "One of possible methods to reset password. It could be: SMS,\
             \ VOICE, WHATSAPP, ...."
       required:
-      - phoneNumber
-      - resetMethodName
+        - phoneNumber
+        - resetMethodName
     VerifyOtpResponse:
       type: object
       properties:
@@ -998,8 +998,8 @@ components:
           type: string
           description: Received OPT code
       required:
-      - otpCode
-      - phoneNumber
+        - otpCode
+        - phoneNumber
     SetPasswordRequestV3:
       type: object
       description: "Request containing phone number, OTP code, new password, and remember\
@@ -1018,9 +1018,9 @@ components:
           type: boolean
           description: "When true token will be saved for extended time, e.g. 30 days"
       required:
-      - newPassword
-      - otpCode
-      - phoneNumber
+        - newPassword
+        - otpCode
+        - phoneNumber
     AuthenticationRequest:
       type: object
       properties:
@@ -1036,8 +1036,8 @@ components:
           description: "When true token will be saved for extended time, e.g. 30 days"
           example: true
       required:
-      - password
-      - username
+        - password
+        - username
     ConnectedUserAuthenticationRequest:
       type: object
       description: Request to authenticate as a connected user
@@ -1056,8 +1056,8 @@ components:
           type: string
           description: Length at least 4 characters
       required:
-      - currentPassword
-      - newPassword
+        - currentPassword
+        - newPassword
     UserConnectionRequest:
       type: object
       description: Request to initiate a connection with another user
@@ -1083,9 +1083,9 @@ components:
           type: string
           description: Type of connection between users
           enum:
-          - UNVERIFIED
-          - VERIFIED
-          - CONNECTED
+            - UNVERIFIED
+            - VERIFIED
+            - CONNECTED
           example: CONNECTED
     ConnectedUsersResponse:
       type: object
