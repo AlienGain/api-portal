@@ -10,7 +10,7 @@ info:
     Use <b>progressive_jackpot</b> key to get all live jackpot updates or include <b>brandIdentifier</b> to filter out jackpots for required brand.
   version: 0.94.0
 servers:
-- url: https://pawa-proxy.replit.app/api/
+- url: https://pawa-proxy.replit.app
   description: Generated server url
 security:
 - Token: []

@@ -70,7 +70,7 @@ info:
     \ when there are resource constraints on the server. |\n\n"
   version: develop
 servers:
-- url: https://pawa-proxy.replit.app/api/
+- url: https://pawa-proxy.replit.app
 security:
 - token: []
   brand: []

@@ -12,7 +12,7 @@ info:
     \ password. If value is not set then default language is English (code = **en**).\n"
   version: 1.180.0
 servers:
-  - url: https://pawa-proxy.replit.app/api/
+  - url: https://pawa-proxy.replit.app
     description: Generated server url
 security:
   - Token: []

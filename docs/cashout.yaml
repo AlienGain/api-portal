@@ -79,7 +79,7 @@ info:
 
   version: "1.0"
 servers:
-- url: https://pawa-proxy.replit.app/api/
+- url: https://pawa-proxy.replit.app
 security:
 - Token: []
   Brand: []

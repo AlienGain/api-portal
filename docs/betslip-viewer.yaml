@@ -4,7 +4,7 @@ info:
   description: ""
   version: 0.142.0
 servers:
-- url: https://pawa-proxy.replit.app/api/
+- url: https://pawa-proxy.replit.app
   description: Generated server url
 security:
 - Token: []
