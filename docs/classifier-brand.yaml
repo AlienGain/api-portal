@@ -29,7 +29,7 @@ info:
     - `x-pawa-brand` header for brand context
   version: 1.50.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
   description: Generated server url
 security:
 - Token: []

@@ -107,7 +107,7 @@ info:
     email: betpawa@betpawa.com
   version: 1.265.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
 security:
 - Token: []
   Brand: []

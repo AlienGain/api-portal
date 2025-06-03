@@ -4,7 +4,7 @@ info:
   description: ""
   version: 0.142.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
   description: Generated server url
 security:
 - Token: []

@@ -13,7 +13,7 @@ info:
     \ \"User ids are missing for direct message\") "
   version: 0.315.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
   description: Generated server url
 security:
 - Token: []

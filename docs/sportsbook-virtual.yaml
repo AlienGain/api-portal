@@ -34,7 +34,7 @@ info:
     \ SPORTSBOOK_STANDING_NOT_FOUND\n"
   version: 1.602.0
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
   description: Generated server url
 security:
 - Token: []

@@ -61,7 +61,7 @@ info:
     )"
   version: 2.201.0
 servers:
-  - url: https://api.develop.qa.verekuu.com
+  - url: https://pawa-proxy.replit.app/api/
     description: Generated server url
 security:
   - Token: []
@@ -206,7 +206,7 @@ paths:
         To verify user account `/api/user/v3/request-verification-code` endpoint must be used with user phone nuber and desired OTP delivery method.
         Then complete verification here `/api/user/v3/verify-and-authenticate` by entering OTP code. If new code is accepted then endpoint return the same response as successful sign up.
 
-        To retrieve OTP - user's last sms could be retrieved on develop `https://api.develop.qa.verekuu.com/sms-for-user/{phoneNumber}` and on test `https://api.test.qa.verekuu.com/sms-for-user/{phoneNumber}`. E.g. - `curl https://api.test.qa.verekuu.com/sms-for-user/+2348167467552`
+        To retrieve OTP - user's last sms could be retrieved on develop `https://pawa-proxy.replit.app/api//sms-for-user/{phoneNumber}` and on test `https://api.test.qa.verekuu.com/sms-for-user/{phoneNumber}`. E.g. - `curl https://api.test.qa.verekuu.com/sms-for-user/+2348167467552`
       operationId: signUpAndAuthenticate
       requestBody:
         content:

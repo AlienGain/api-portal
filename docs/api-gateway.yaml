@@ -26,7 +26,7 @@ info:
     \ will have status code, route ID and brand identifier in tags"
   version: 0.914.0
 servers:
-  - url: https://api.develop.qa.verekuu.com
+  - url: https://pawa-proxy.replit.app/api/
     description: Generated server url
 security:
   - Token: []

@@ -4,7 +4,7 @@ info:
   description: HTTP API for placing bets and checking bet status
   version: "1.0"
 servers:
-- url: https://api.develop.qa.verekuu.com
+- url: https://pawa-proxy.replit.app/api/
   description: Generated server url
 security:
 - Token: []
